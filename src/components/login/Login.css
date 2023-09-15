@@ -2,10 +2,20 @@
     width:60%;
     
 }
+.banner-logo-container{
+    /* background-color: rgba(250, 250, 250, 1); */
+    height:20vh;
+    padding: 0;
+    margin: 0;
+}
 .banner-image{
     width:100%;
-    height:100vh;
+    height:70vh;
     object-fit: cover;
+}
+.banner-logo{
+    /* width:100%; */
+    height:80px;
 }
 .business-input{
     width:40%;
@@ -16,14 +26,14 @@
 }
 .login-btn{
     width:100%;
-    background-color:rgba(0, 196, 186, 1);
+    background-color:rgba(7, 75, 137, 1);
     color:#fff;
     border-radius: 30px;
     border: none;
     font-size: 15px;
 }
 .login-btn:hover{
-    background-color:rgba(0, 196, 186, 1);
+    background-color:rgba(7, 75, 137, 1);
 
 }
 .forget-password{

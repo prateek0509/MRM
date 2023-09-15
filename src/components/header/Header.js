@@ -1,13 +1,13 @@
 import React from 'react'
 import {Navbar,Container} from 'react-bootstrap'
 import './Header.css'
-
+import Logo from "../../assets/Images/mrm_logo.png"
 const Header = () => {
   return (
     <div>
         <Navbar className=" header">
       <Container>
-        <Navbar.Brand href="#home" style={{color:"#fff"}}><b>MRM</b></Navbar.Brand>
+        <Navbar.Brand href="#home" style={{color:"#fff"}}><img src={Logo} alt="" style={{height:"40px"}}/></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text className='mx-3' style={{color:"#fff"}}>

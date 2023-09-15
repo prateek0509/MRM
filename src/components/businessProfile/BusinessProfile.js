@@ -1,14 +1,19 @@
 import React from "react";
 import { Image, Form ,Button} from "react-bootstrap";
-import Banner from "../../assets/Images/Banner.png";
+import BannerB from "../../assets/Images/BannerB.png";
 import "./BusinessProfile.css";
+import LogoB from "../../assets/Images/mrm_logo_g.png";
+
 
 const BusinessProfile = () => {
   return (
     <div className="d-flex ">
-      <div className="mx-0 px-0 banner-image-container">
-        <Image className="banner-image" src={Banner} />
-      </div>
+ <div className="mx-0 px-0 banner-image-container">
+        <Image className="banner-image" src={BannerB} />
+        <div className="banner-logo-container mt-5">
+        <Image className="banner-logo" src={LogoB} />
+        </div>
+        </div>
       <div className="business-input mx-5 px-3">
         <div className="business-input-form">
           <h4 className="text-start">Create Business Profile</h4>
