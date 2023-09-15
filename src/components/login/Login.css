@@ -1,0 +1,31 @@
+.banner-image-container{
+    width:60%;
+    
+}
+.banner-image{
+    width:100%;
+    height:100vh;
+    object-fit: cover;
+}
+.business-input{
+    width:40%;
+
+}
+.login-input-form{
+    margin-top: 150px;
+}
+.login-btn{
+    width:100%;
+    background-color:rgba(0, 196, 186, 1);
+    color:#fff;
+    border-radius: 30px;
+    border: none;
+    font-size: 15px;
+}
+.login-btn:hover{
+    background-color:rgba(0, 196, 186, 1);
+
+}
+.forget-password{
+    color:rgba(77, 167, 255, 1) ;
+}

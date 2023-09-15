@@ -1,0 +1,53 @@
+.practitioner-info {
+    display: flex;
+
+}
+.practitioner-title{
+    font-size: 15px;
+}
+.details-btn{
+    background-color: 
+    rgba(236, 168, 37, 1);
+    color: #fff;
+    border:none;
+    border-radius: 4px;
+}
+.prescription-btn{
+    background-color: rgba(0, 196, 186, 1);
+    color: #fff;
+    border:none ;
+    border-radius: 6px;
+}
+.curr-prescription-card{
+    border-radius: 15px;
+    border: none;
+    background-color:rgba(217, 247, 255, 1)
+}
+.previous-prescription-card{
+    border-radius: 15px;
+    border: none;
+    background-color:rgba(217, 247, 255, 1)
+
+}
+.resource-btn{
+    display: flex;
+    border:none;
+    color:rgba(0, 196, 186, 1);
+    border: 1px solid rgba(0, 196, 186, 1);
+    border-radius: 50px;
+}
+.ask-btn{
+    display: flex;
+    background-color: rgba(0, 196, 186, 1);
+    border-radius: 50px;
+    color:#fff;
+
+}
+.ask-btn-img{
+    height: 65px;
+    width: 65px;
+}
+.ask-btn-img-modal{
+    height: 45px;
+    width: 45px;
+}
