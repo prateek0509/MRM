@@ -6,6 +6,9 @@ import HomeScreen from './components/homeScreen/HomeScreen';
 import Terms from './components/terms&Condition/Terms';
 import { BrowserRouter as Router, Routes, Route, Link, Redirect } from 'react-router-dom'
 import BusinessLogin from './components/businessLogin/BusinessLogin';
+import Signup from './components/signup/Signup';
+import BankDetails from './components/bankdetails/BankDetails';
+import DashboardPractitioner from './components/dashboardPractitioner/DashboardPractitioner';
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
           <Route exact path='/businesslogin' element={<BusinessLogin />} />
           <Route exact path='/terms' element={<Terms />} />
           <Route exact path='/homescreen' element={<HomeScreen />} />
+          <Route exact path='/signup/:email' element={<Signup />} />
+          <Route exact path='/bankdetails' element={<BankDetails />} />
+          <Route exact path='/dashboardpractitioner' element={<DashboardPractitioner />} />
         </Routes>
       </Router>
       {/* <Terms/> */}
