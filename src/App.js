@@ -9,6 +9,7 @@ import BusinessLogin from './components/businessLogin/BusinessLogin';
 import Signup from './components/signup/Signup';
 import BankDetails from './components/bankdetails/BankDetails';
 import DashboardPractitioner from './components/dashboardPractitioner/DashboardPractitioner';
+import PrescriptionHistory from './components/prescriptionHistory/PrescriptionHistory';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path='/signup/:email' element={<Signup />} />
           <Route exact path='/bankdetails' element={<BankDetails />} />
           <Route exact path='/dashboardpractitioner' element={<DashboardPractitioner />} />
+          <Route exact path='/prescriptionhistory' element={<PrescriptionHistory />} />
         </Routes>
       </Router>
       {/* <Terms/> */}
