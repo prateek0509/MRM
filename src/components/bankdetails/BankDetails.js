@@ -14,31 +14,42 @@ const BankDetails = () => {
         <Image className="banner-logo" src={LogoB} />
         </div>
       </div>
-      <div className="login-input mx-5 px-3">
-        <div className="login-input-form text-start">
+      <div className="login-input mx-5 px-3 ">
+        <div className="login-input-form text-start" >
+          <p style={{fontSize:"30px"}}><b>Bank Account Details</b></p>
           <Form>
-            <Form.Group className="mb-3 my-4" controlId="formGrouptext">
-              <Form.Control type="text" placeholder="Bank Name"  />
+            <Form.Group className="mb-2 my-4" controlId="formGrouptext">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="Bank Name"  />
             </Form.Group>
-            <Form.Group className="mb-3 my-4" controlId="formGrouptext">
-              <Form.Control type="text" placeholder="Account Name"  />
+            <Form.Group className="mb-2 my-1" controlId="formGrouptext">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="Account Name"  />
             </Form.Group>
-            <Form.Group className="mb-3 my-4" controlId="formGrouptext">
-              <Form.Control type="text" placeholder="Account Number"  />
+            <Form.Group className="mb-2 my-1" controlId="formGrouptext">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="Account Number"  />
             </Form.Group>
-            <div className='row mt-4'>
-            <Form.Group className="mb-3 col-6" controlId="formGroupPassword">
-              <Form.Control type="text" placeholder="Routing Number" />
+            <div className='row mt-1'>
+            <Form.Group className="mb-2 col-6" controlId="formGroupPassword">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="Routing Number" />
             </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="formGroupPassword">
-              <Form.Control type="text" placeholder="IBAN" />
+            <Form.Group className="mb-2 col-6" controlId="formGroupPassword">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="IBAN" />
             </Form.Group>     
             </div>
-            <Form.Group className="mb-3 mt-2" controlId="formGroupPassword">
-              <Form.Control type="text" placeholder="SWIFT" />
+            <Form.Group className="mb-2 " controlId="formGroupPassword">
+              <Form.Control type="text" style={{borderRadius:"10px"}} placeholder="SWIFT" />
             </Form.Group>
             {/* <p className="mb-4 text-end forget-password">Forget Password ?</p> */}
-            <Button className="login-btn py-2">SAVE</Button>
+            <Button className="login-btn mt-4 py-2">Save</Button>
+            <Form.Group className="mb-3 mt-4" controlId="formGroupPassword">
+            <Form.Check
+            inline
+            label="Medical Quant USA Inc dba Multi Radiance Medical is hereby authorized to directly deposit my pay to the account listed above. This authorization will remain in effect until I modify or cancel it in writing."
+            name="group1"
+            style={{color:"rgba(166, 166, 166, 1)",fontSize:"11px"}}
+            // type={type}
+            // id={`inline-${type}-1`}
+          />
+            </Form.Group>
           </Form>
         </div>
       </div>

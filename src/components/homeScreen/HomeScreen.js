@@ -57,10 +57,34 @@ const HomeScreen = () => {
               <th className="product" style={{ width: "15%",color:"rgba(7, 75, 137, 1)" }}>
               Billing Information
               </th>
+              <th className="product" style={{ width: "19%",color:"rgba(7, 75, 137, 1)" }}>
+              Outbound Tracking Number
+              </th>
+              <th className="product" style={{ width: "19%",color:"rgba(7, 75, 137, 1)" }}>
+              Laser Serial Number
+              </th>
             </thead>
             <tbody>
               <tr className="py-2">
                 <td><b>Credit card: </b>XXXXXXX8473</td>
+                <td>XXXXXXX8473</td>
+                <td>12345678473</td>
+              </tr>
+            </tbody>
+            <thead style={{ width: "100%" }}>
+              <th className="product" style={{ width: "15%",color:"rgba(7, 75, 137, 1)" }}>
+              
+              </th>
+              <th className="product" style={{ width: "19%",color:"rgba(7, 75, 137, 1)" }}>
+              Return Tracking Number
+              </th>
+              <th style={{ width: "19%",color:"rgba(7, 75, 137, 1)" }}></th>
+            </thead>
+            <tbody>
+              <tr className="py-2">
+                <td></td>
+                <td>XXXXXXX8473</td>
+                <td className="ms-auto"><button className="ask-btn px-3 mx-3 py-2" style={{border:"none"}}>Image Report</button></td>
               </tr>
             </tbody>
           </table>

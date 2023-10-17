@@ -96,3 +96,19 @@
     .search-form{
         border-radius: 20px;
     }
+    .active-tab{
+        border: none;
+        color: #fff;
+        border-radius: 20px;
+        background-color:rgba(0, 83, 139, 1);
+        padding: 5px;
+        padding-bottom: 8px;
+    }
+    .non-active-tab{
+        background-color:rgba(113, 113, 113, 1);
+        border-radius: 20px;
+        color: #fff;
+        border:none;
+        padding: 5px;
+        padding-bottom: 8px;
+    }

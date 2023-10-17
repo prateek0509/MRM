@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.login-input-form{
+    margin-top: 100px;
+}
+
+
+.login-input {
+font-family: poppins;
+}
+
+::-webkit-input-placeholder {
+    font-size: 12px!important;
+ }
+::-webkit-input-placeholder {
+    color: #C9C9BD!important;
+ }
