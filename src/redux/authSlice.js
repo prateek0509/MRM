@@ -248,7 +248,6 @@ const authSlice = createSlice({
             state.loading = false;
             if (token) {
                 state.isAuthenticated = true;
-                state.msg = msg
                 state.token = token
                 state.user = user
 
@@ -257,9 +256,7 @@ const authSlice = createSlice({
                     autoClose: 2000,
                     hideProgressBar: true,
                 });
-
-                localStorage.setItem('msg', msg)
-                localStorage.setItem('token', key)
+                localStorage.setItem('token', token)
                 localStorage.setItem('isAuthenticated', state.isAuthenticated)
                 localStorage.setItem('user', JSON.stringify(user))
             } else {

@@ -1,0 +1,16 @@
+.card-header{
+    color: #fff;
+    background-color: rgba(6, 47, 45, 1);
+}
+
+.body-container-card{
+    background-color:rgba(237, 237, 237, 1);
+    width: 93%;
+}
+.card-heading{
+    color:rgba(0, 83, 139, 1);
+    font-weight: 500;
+}
+.card-details-info{
+    font-weight: 600;
+}

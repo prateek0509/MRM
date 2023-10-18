@@ -16,6 +16,9 @@ import "./DashboardPractitioner.css";
 import Footer from "../footer/Footer";
 import SearchImg from "../../assets/Images/search.png";
 import EmailImg from "../../assets/Images/email.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const DashboardPractitioner = () => {
   const [show, setShow] = useState(false);
   const [activeTab,setActiveTab] = useState("A")
@@ -38,7 +41,7 @@ const DashboardPractitioner = () => {
   const handleInviteUser =async (e)=>{
     e.preventDefault()
     try{
-        const response = await fetch("https://flat-sun-42336.botics.co/api/v1/admininvite/", {
+        const response = await fetch("https://flat-sun-42336.botics.co/api/v1/petownerinvite/", {
             method: "post",
             headers: {
                 'content-Type': "application/json"
@@ -46,6 +49,16 @@ const DashboardPractitioner = () => {
             body: JSON.stringify(body)
         })
         const data = await response.json()
+        if(data.msg){
+          toast.success(data.msg, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            hideProgressBar: true,
+          });
+          setTimeout(() => {
+            setShowPrescribe(false)
+          }, 2000);
+        }
         console.log(data)
     }catch(error){
         console.log(error)
@@ -262,6 +275,7 @@ const DashboardPractitioner = () => {
                     <img className="fa-searchI" src={EmailImg} alt="search" />
                   </label>
                 </div>
+                <ToastContainer/>
                 <button className="dp-card-btn-invite mx-2 px-3 mb-1" onClick={handleInviteUser}>
                   Invite new user
                 </button>

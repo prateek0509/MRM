@@ -16,6 +16,7 @@ import LoginAdmin from './components/login/LoginAdmin';
 import SignupPractitioner from './components/signup/SignupPractitioner';
 import SignupAdmin from './components/signup/SignupAdmin';
 import AdminDashboard from './components/admin/AdminDashboard';
+import CardDetails from './components/cardDetails/CardDetails';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route exact path='/dashboardpractitioner' element={<DashboardPractitioner />} />
           <Route exact path='/prescriptionhistory' element={<PrescriptionHistory />} />
           <Route exact path='/dashboardadmin' element={<AdminDashboard />} />
+          <Route exact path='/carddetails' element={<CardDetails />} />
         </Routes>
       </Router>
     </div>
