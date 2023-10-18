@@ -7,8 +7,10 @@ import { useDispatch } from "react-redux";
 import { signinuser } from "../../redux/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate,Link } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [password,setPassword] = useState("")
   const [email,setEmail] = useState("")
   const [errors, setErrors] = useState({});
@@ -73,6 +75,9 @@ const Login = () => {
       setEmail("");
       setErrors({});
       dispatch(signinuser(body)) 
+      setTimeout(() => {
+        navigate('/homescreen')
+      }, 3000);
     }
   };
 

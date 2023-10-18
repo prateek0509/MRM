@@ -9,8 +9,10 @@ import { useDispatch } from "react-redux";
 import { signUpUser } from "../../redux/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate,Link } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirm_password] = useState("");
   const dispatch = useDispatch();
@@ -106,6 +108,9 @@ const Signup = () => {
       dispatch(signUpUser(body)) 
       setErrors({});
       console.log("test")   
+      setTimeout(() => {
+        navigate('/')
+      }, 3000);
     }
   };
 
