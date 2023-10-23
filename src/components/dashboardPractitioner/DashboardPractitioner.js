@@ -19,7 +19,7 @@ import SearchImg from "../../assets/Images/search.png";
 import EmailImg from "../../assets/Images/email.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getProductData, getUserProfile } from "../../redux/user";
+import { getPreviousPrescription, getProductData, getUserProfile } from "../../redux/user";
 const DashboardPractitioner = () => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
@@ -28,12 +28,17 @@ const DashboardPractitioner = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [showPp, setShowPp] = useState(false);
+  const [modalData,setModalData] = useState("")
   const handleClosePp = () => setShowPp(false);
-  const handleShowPp = () => setShowPp(true);
+  const handleShowPp = (item) =>{ 
+    setShowPp(true)
+    setModalData(item)
+  };
   const [showPrescribe, setShowPrescribe] = useState(false);
   const [showUser, setShowUser] = useState(false);
   const [userList, setUserList] = useState([]);
   const [productList, setProductList] = useState([]);
+  const [previousPrescription, setPreviousPrescription] = useState([]);
   const handleClosePrescribe = () => setShowPrescribe(false);
   const handleShowPrescribe = () => setShowPrescribe(true);
   const handleCloseUser = () => setShowUser(false);
@@ -42,8 +47,9 @@ const DashboardPractitioner = () => {
   useEffect(() => {
     dispatch(getUserProfile()).then((result) => setUserList(result));
     dispatch(getProductData()).then((result) => setProductList(result));
+    dispatch(getPreviousPrescription()).then((result) => setPreviousPrescription(result));
   }, []);
-  console.log(userList, productList, "uul");
+  console.log(modalData, "uul");
   const body = {
     email: inviteUser,
   };
@@ -383,50 +389,21 @@ const DashboardPractitioner = () => {
               >
                 Total Fee
               </th>
-              <th
-                className="cart"
-                style={{ width: "27%", color: "rgba(7, 75, 137, 1)" }}
-              >
-                Address
-              </th>
+
             </thead>
             <tbody>
               <tr className="py-2">
-                <td>Martin Heir</td>
-                <td>Anti laser scanner</td>
-                <td>09/08/2023</td>
-                <td>09/08/2023</td>
-                <td>Approved</td>
-                <td>$630.00</td>
-                <td>9 Avenue , 340762</td>
-              </tr>
-            </tbody>
-          </table>
-          <table className="my-4">
-            <thead style={{ width: "100%" }}>
-              <th
-                className="product"
-                style={{ width: "15%", color: "rgba(7, 75, 137, 1)" }}
-              >
-                Billing Information
-              </th>
-            </thead>
-            <tbody>
-              <tr className="py-2">
-                <td>
-                  <b>Credit card: </b>XXXXXXX8473
-                </td>
+                <td>{modalData.username}</td>
+                <td>{modalData.item}</td> 
+                <td>{modalData.start_date}</td> 
+                <td>{modalData.return_date}</td> 
+                <td>{modalData.status}</td> 
+                <td>{modalData.price}</td> 
               </tr>
             </tbody>
           </table>
         </Modal.Body>
         <Modal.Footer>
-          {/* <span className="ask-btn px-3 mx-3">
-            <img className="ask-btn-img-modal" src={AskBtn} />
-            <span className="mt-2 mx-3">
-              Have a Question about this Transaction
-            </span>
-          </span> */}
           <Button
             className="py-2"
             variant="primary"
@@ -437,7 +414,7 @@ const DashboardPractitioner = () => {
               border: "none",
             }}
           >
-            2 Days Remaining
+           {modalData.days_remaining} Days Remaining
           </Button>
         </Modal.Footer>
       </Modal>
@@ -1035,6 +1012,9 @@ const DashboardPractitioner = () => {
                   <th style={{ width: "15%" }}></th>
                 </thead>
                 <tbody>
+                  {
+                    previousPrescription.payload.map((item)=>{
+                      return(
                   <tr className="" style={{ borderBottom: "1px solid #fff" }}>
                     <td className="practitioner-info mx-3 my-3">
                       {" "}
@@ -1048,55 +1028,27 @@ const DashboardPractitioner = () => {
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
                       />
                       <h5 className="practitioner-title mx-2 my-2">
-                        Marlin Heir
+                        {item.username}
                       </h5>
                     </td>
-                    <td className="my-2 text-start">Anti laser treatment</td>
-                    <td>05/03/2023</td>
-                    <td>11/04/2023</td>
+                    <td className="my-2 text-start">{item.item}</td>
+                    <td>{item.start_date}</td>
+                    <td>{item.return_date}</td>
                     <td>
-                      <b>$ 28</b>
+                      <b>{item.price}</b>
                     </td>
                     <td>
                       <button
                         className="details-btn mx-2 px-3 py-2"
-                        onClick={handleShowPp}
+                        onClick={()=>{setShowPp(true);setModalData(item)}}
                       >
                         View Details
                       </button>
                     </td>
                   </tr>
-                  <tr className="" style={{ borderBottom: "1px solid #fff" }}>
-                    <td className="practitioner-info mx-3 my-3">
-                      {" "}
-                      <img
-                        className=""
-                        style={{
-                          borderRadius: "50%",
-                          height: "40px",
-                          width: "40px",
-                        }}
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                      />
-                      <h5 className="practitioner-title mx-2 my-2">
-                        Marlin Heir
-                      </h5>
-                    </td>
-                    <td className="my-2 text-start">Anti laser treatment</td>
-                    <td>05/03/2023</td>
-                    <td>11/04/2023</td>
-                    <td>
-                      <b>$ 28</b>
-                    </td>
-                    <td>
-                      <button
-                        className="details-btn mx-2 px-3 py-2"
-                        onClick={handleShowPp}
-                      >
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
+                      )
+                    })
+                  }
                 </tbody>
               </table>
               {/* <Button variant="primary">Go somewhere</Button> */}

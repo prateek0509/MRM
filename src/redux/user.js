@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
-// import { BehaviorSubject } from 'rxjs';
-// const accountSubject = new BehaviorSubject(null);
 import { useHistory } from 'react-router-dom';
 
 const initialState = {
@@ -45,6 +43,17 @@ export const getProductData = createAsyncThunk('getUserData', async (body) => {
     })
     return await res.json();
 })
+export const getPreviousPrescription = createAsyncThunk('getPreviousPrescription', async (body) => {
+    const res = await fetch("https://flat-sun-42336.botics.co/prescriptions/prescription/current_prescriptions/", {
+        method: "get",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(body)
+    })
+    return await res.json();
+})
 
 
 
@@ -75,7 +84,6 @@ export const uploadPhoto = createAsyncThunk('uploadPhoto', async (body) => {
     }).catch(error => {
         console.log(error, "error");
     })
-    // return await res.json();
 })
 
 
@@ -85,7 +93,9 @@ export const uploadPhoto = createAsyncThunk('uploadPhoto', async (body) => {
 
 const authSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState:{
+        getPreviousPrescription:[]  
+    },
     reducers: {
 
 
@@ -143,37 +153,30 @@ const authSlice = createSlice({
         [getUserProfile.rejected]: (state, action) => {
             state.loading = true
         },
-
-
-        [updateProfile.pending]: (state, action) => {
+        [getUserProfile.pending]: (state, action) => {
             state.loading = true
         },
-        [updateProfile.fulfilled]: (state, action) => {
+        [getUserProfile.fulfilled]: (state, action) => {
             state.loading = false;
             console.log(action.payload, "action.payload");
+            state.userdata = action.payload
 
-            state.updateddata = action.payload
-
-            if (action.payload) {
-                // alert('Data saved successfully')
-                toast.success('Profile updated successfully', {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                });
-            } else {
-                // alert('Error While saving data')
-                toast.error("Error While saving data", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000,
-                    hideProgressBar: true,
-                });
-            }
+        },
+        [getUserProfile.rejected]: (state, action) => {
+            state.loading = true
+        },
 
 
+        [getPreviousPrescription.pending]: (state, action) => {
+            state.loading = true
+        },
+        [getPreviousPrescription.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.userdata = action.payload
+        },
+        [getPreviousPrescription.rejected]: (state, action) => {
+            state.loading = true
         },
      
     }
 })
-
-// export default user.reducer
