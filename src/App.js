@@ -26,6 +26,7 @@ function App() {
         <Routes>
           <Route exact path='/businessprofile' element={<BusinessProfile />} />
           <Route exact path='/' element={<Login />} />
+          {/* <Route exact path='/loginpractitioner' element={<Login />} /> */}
           <Route exact path='/loginadmin' element={<LoginAdmin />} />
           <Route exact path='/loginpractitioner' element={<LoginPractitioner />} />
           <Route exact path='/forget' element={<ForgetPassword />} />

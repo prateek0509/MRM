@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate,Link } from "react-router-dom";
 
-const LoginPractitioner = () => {
+const LoginP = () => {
   const navigate = useNavigate();
   const [password,setPassword] = useState("")
   const [email,setEmail] = useState("")
@@ -76,7 +76,7 @@ const LoginPractitioner = () => {
       setErrors({});
       dispatch(signinuser(body)) 
       setTimeout(() => {
-        navigate('/dashboardpractitioner')
+        navigate('/homescreen')
       }, 3000);
     }
   };
@@ -120,4 +120,4 @@ const LoginPractitioner = () => {
   );
 };
 
-export default LoginPractitioner;
+export default LoginP;

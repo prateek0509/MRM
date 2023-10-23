@@ -4,14 +4,14 @@ import { useParams } from "react-router";
 import { Image, Form, Button } from "react-bootstrap";
 import Banner from "../../assets/Images/Banner.png";
 import LogoB from "../../assets/Images/mrm_logo_g.png";
-import "./Signup.css";
+// import "./Signup.css";
 import { useDispatch } from "react-redux";
 import { signUpUser } from "../../redux/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate,Link } from "react-router-dom";
 
-const SignupPractitioner = () => {
+const SignupP = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirm_password] = useState("");
@@ -109,7 +109,7 @@ const SignupPractitioner = () => {
       setErrors({});
       console.log("test")   
       setTimeout(() => {
-        navigate('/loginpractitioner')
+        navigate('/')
       }, 3000);
     }
   };
@@ -168,4 +168,4 @@ const SignupPractitioner = () => {
   );
 };
 
-export default SignupPractitioner;
+export default SignupP;

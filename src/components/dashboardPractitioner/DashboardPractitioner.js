@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../header/Header";
 import ViewMore from "../../assets/Images/eye-icon.png";
 import AskBtn from "../../assets/Images/AskBtn.png";
@@ -12,17 +12,19 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 import "./DashboardPractitioner.css";
 import Footer from "../footer/Footer";
 import SearchImg from "../../assets/Images/search.png";
 import EmailImg from "../../assets/Images/email.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getProductData, getUserProfile } from "../../redux/user";
 const DashboardPractitioner = () => {
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const [activeTab,setActiveTab] = useState("A")
-  const [inviteUser,setInviteUser]= useState("")
+  const [activeTab, setActiveTab] = useState("A");
+  const [inviteUser, setInviteUser] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [showPp, setShowPp] = useState(false);
@@ -30,41 +32,50 @@ const DashboardPractitioner = () => {
   const handleShowPp = () => setShowPp(true);
   const [showPrescribe, setShowPrescribe] = useState(false);
   const [showUser, setShowUser] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [productList, setProductList] = useState([]);
   const handleClosePrescribe = () => setShowPrescribe(false);
   const handleShowPrescribe = () => setShowPrescribe(true);
   const handleCloseUser = () => setShowUser(false);
   const handleShowUser = () => setShowUser(true);
 
-  const body={
-    "email": inviteUser
-   }
-  const handleInviteUser =async (e)=>{
-    e.preventDefault()
-    try{
-        const response = await fetch("https://flat-sun-42336.botics.co/api/v1/petownerinvite/", {
-            method: "post",
-            headers: {
-                'content-Type': "application/json"
-            },
-            body: JSON.stringify(body)
-        })
-        const data = await response.json()
-        if(data.msg){
-          toast.success(data.msg, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 2000,
-            hideProgressBar: true,
-          });
-          setTimeout(() => {
-            setShowPrescribe(false)
-          }, 2000);
+  useEffect(() => {
+    dispatch(getUserProfile()).then((result) => setUserList(result));
+    dispatch(getProductData()).then((result) => setProductList(result));
+  }, []);
+  console.log(userList, productList, "uul");
+  const body = {
+    email: inviteUser,
+  };
+  const handleInviteUser = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "https://flat-sun-42336.botics.co/api/v1/petownerinvite/",
+        {
+          method: "post",
+          headers: {
+            "content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
         }
-        console.log(data)
-    }catch(error){
-        console.log(error)
+      );
+      const data = await response.json();
+      if (data.msg) {
+        toast.success(data.msg, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+        setTimeout(() => {
+          setShowPrescribe(false);
+        }, 2000);
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
-  }
-
+  };
 
   return (
     <div>
@@ -83,7 +94,6 @@ const DashboardPractitioner = () => {
           <h5>User</h5>
         </Modal.Header>
         <Modal.Body className=" mt-3 mb-5">
-
           <div>
             <Card
               className="mx-2 py-4 px-5"
@@ -270,13 +280,16 @@ const DashboardPractitioner = () => {
                       type="text"
                       className="search-formI"
                       placeholder="Email of new user"
-                      onChange={(e)=>setInviteUser(e.target.value)}
+                      onChange={(e) => setInviteUser(e.target.value)}
                     />
                     <img className="fa-searchI" src={EmailImg} alt="search" />
                   </label>
                 </div>
-                <ToastContainer/>
-                <button className="dp-card-btn-invite mx-2 px-3 mb-1" onClick={handleInviteUser}>
+                <ToastContainer />
+                <button
+                  className="dp-card-btn-invite mx-2 px-3 mb-1"
+                  onClick={handleInviteUser}
+                >
                   Invite new user
                 </button>
               </div>
@@ -434,312 +447,349 @@ const DashboardPractitioner = () => {
       >
         DashBoard
       </h5>
-      <div className="ps-5 py-3 text-start" style={{backgroundColor:"rgba(227, 227, 227, 1)"}}>
-        <button onClick={()=>setActiveTab("A")} className={activeTab==="A"?"active-tab mx-3 px-4":"non-active-tab mx-3 px-4"}>Questions</button>
-        <button onClick={()=>setActiveTab("B")} className={activeTab==="B"?"active-tab mx-3 px-4":"non-active-tab mx-3 px-4"}>User</button>
-        <button onClick={()=>setActiveTab("C")} className={activeTab==="C"?"active-tab mx-3 px-4":"non-active-tab mx-3 px-4"}>Products</button>
-        <button onClick={()=>setActiveTab("D")} className={activeTab==="D"?"active-tab mx-3 px-4":"non-active-tab mx-3 px-4"}>Prescriptions</button>
+      <div
+        className="ps-5 py-3 text-start"
+        style={{ backgroundColor: "rgba(227, 227, 227, 1)" }}
+      >
+        <button
+          onClick={() => setActiveTab("A")}
+          className={
+            activeTab === "A"
+              ? "active-tab mx-3 px-4"
+              : "non-active-tab mx-3 px-4"
+          }
+        >
+          Questions
+        </button>
+        <button
+          onClick={() => setActiveTab("B")}
+          className={
+            activeTab === "B"
+              ? "active-tab mx-3 px-4"
+              : "non-active-tab mx-3 px-4"
+          }
+        >
+          User
+        </button>
+        <button
+          onClick={() => setActiveTab("C")}
+          className={
+            activeTab === "C"
+              ? "active-tab mx-3 px-4"
+              : "non-active-tab mx-3 px-4"
+          }
+        >
+          Products
+        </button>
+        <button
+          onClick={() => setActiveTab("D")}
+          className={
+            activeTab === "D"
+              ? "active-tab mx-3 px-4"
+              : "non-active-tab mx-3 px-4"
+          }
+        >
+          Prescriptions
+        </button>
       </div>
-      {
-        activeTab==="A" &&
-      <div className="text-start mx-5 mt-4 mb-5">
-        <h5>List of questions</h5>
-        <div
-          className="pt-3 px-4 mt-3 mb-3  d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
+      {activeTab === "A" && (
+        <div className="text-start mx-5 mt-4 mb-5">
+          <h5>List of questions</h5>
+          <div
+            className="pt-3 px-4 mt-3 mb-3  d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
             </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-2 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className="  px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
+            </div>
+          </div>
+          <div
+            className="pt-3 px-4 my-3 d-flex justify-content-between"
+            style={{
+              backgroundColor: "rgba(237, 237, 237, 1)",
+              borderRadius: "10px",
+            }}
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et?
+            </p>
+            <div className="d-flex">
+              <p className="mx-3">
+                <b>Martin Heir</b>
+              </p>
+              <div
+                className=" px-3"
+                onClick={handleShow}
+                style={{
+                  backgroundColor: "rgba(166, 166, 166, 1)",
+                  height: "30px",
+                  color: "#fff",
+                  cursor: "pointer",
+                  borderRadius: "18px",
+                }}
+              >
+                <img
+                  className="me-1"
+                  src={ViewMore}
+                  alt="view"
+                  style={{ height: "12px" }}
+                />{" "}
+                View
+              </div>
             </div>
           </div>
         </div>
-        <div
-          className="pt-3 px-4 my-2 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
+      )}
+      {activeTab === "B" && (
+        <div className="" style={{ width: "100%" }}>
+          <p className="text-start mx-5 mt-5 mb-3">
+            <b>List of Users</b>
           </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className="  px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-        <div
-          className="pt-3 px-4 my-3 d-flex justify-content-between"
-          style={{
-            backgroundColor: "rgba(237, 237, 237, 1)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et?
-          </p>
-          <div className="d-flex">
-            <p className="mx-3">
-              <b>Martin Heir</b>
-            </p>
-            <div
-              className=" px-3"
-              onClick={handleShow}
-              style={{
-                backgroundColor: "rgba(166, 166, 166, 1)",
-                height: "30px",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "18px",
-              }}
-            >
-              <img
-                className="me-1"
-                src={ViewMore}
-                alt="view"
-                style={{ height: "12px" }}
-              />{" "}
-              View
-            </div>
-          </div>
-        </div>
-      </div>
-      }
-      {
-        activeTab==="B" &&
-      <div className="" style={{ width: "100%" }}>
-        <p className="text-start mx-5 mt-5 mb-3">
-          <b>List of Users</b>
-        </p>
           <table className="mx-5" style={{ width: "90%" }}>
             <thead
               className=""
@@ -765,146 +815,51 @@ const DashboardPractitioner = () => {
               </th>
             </thead>
             <tbody>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="practitioner-info ms-5 my-3">
-                  {" "}
-                  <img
+              {userList.payload.map((item) => {
+                return (
+                  <tr
                     className=""
                     style={{
-                      borderRadius: "50%",
-                      height: "40px",
-                      width: "40px",
+                      borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)",
                     }}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                  />
-                  <h5 className="practitioner-title mx-2 my-2">Marlin Heir</h5>
-                </td>
-                <td className="my-2 text-start">26/08/2023</td>
-
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowUser}
                   >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="practitioner-info ms-5 my-3">
-                  {" "}
-                  <img
-                    className=""
-                    style={{
-                      borderRadius: "50%",
-                      height: "40px",
-                      width: "40px",
-                    }}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                  />
-                  <h5 className="practitioner-title mx-2 my-2">Marlin Heir</h5>
-                </td>
-                <td className="my-2 text-start">26/08/2023</td>
+                    <td className="practitioner-info ms-5 my-3">
+                      {" "}
+                      <img
+                        className=""
+                        style={{
+                          borderRadius: "50%",
+                          height: "40px",
+                          width: "40px",
+                        }}
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
+                      />
+                      <h5 className="practitioner-title mx-2 my-2">
+                        {item.username}
+                      </h5>
+                    </td>
+                    <td className="my-2 text-start">
+                      {item.date_added.slice(0, 10)}
+                    </td>
 
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowUser}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="practitioner-info ms-5 my-3">
-                  {" "}
-                  <img
-                    className=""
-                    style={{
-                      borderRadius: "50%",
-                      height: "40px",
-                      width: "40px",
-                    }}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                  />
-                  <h5 className="practitioner-title mx-2 my-2">Marlin Heir</h5>
-                </td>
-                <td className="my-2 text-start">26/08/2023</td>
-
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowUser}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="practitioner-info  ms-5 my-3">
-                  {" "}
-                  <img
-                    className=""
-                    style={{
-                      borderRadius: "50%",
-                      height: "40px",
-                      width: "40px",
-                    }}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                  />
-                  <h5 className="practitioner-title mx-2 my-2">Marlin Heir</h5>
-                </td>
-                <td className="my-2 text-start">26/08/2023</td>
-
-                <td>
-                  <b>
-                    <button className="dp-unavailable-btn py-1 mx-2 px-3 py-1">
-                      Not Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowUser}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
+                    <td>
+                      <b>
+                        <button className="dp-available-btn px-3 py-1 mx-2 px-3 py-1">
+                          Available
+                        </button>
+                      </b>
+                    </td>
+                    <td>
+                      <button
+                        className="dp-btn mx-2 px-3 py-1"
+                        onClick={handleShowUser}
+                      >
+                        Prescribe
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
               <tr
                 className=""
                 style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
@@ -942,64 +897,82 @@ const DashboardPractitioner = () => {
               </tr>
             </tbody>
           </table>
-      </div>
-      }
-      {
-        activeTab === "C" &&
-      <div style={{ width: "100%" }}>
-        <p className="text-start mx-5 mt-5 mb-3">
-          <b>List of Products</b>
-        </p>
-          <table className="mx-5" style={{ width: "90%" }} >
+        </div>
+      )}
+      {activeTab === "C" && (
+        <div style={{ width: "100%" }}>
+          <p className="text-start mx-5 mt-5 mb-3">
+            <b>List of Products</b>
+          </p>
+          <table className="mx-5" style={{ width: "90%" }}>
             <thead
               className=""
               style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
             >
               <th
                 className="product table-head text-start"
-                style={{ width: "25%" }}
+                style={{ width: "20%" }}
               >
                 Product name
               </th>
               <th
                 className="description table-head mx-2 text-start"
-                style={{ width: "25%" }}
+                style={{ width: "30%" }}
               >
                 Description
               </th>
-              <th className="price mx-2 table-head" style={{ width: "25%" }}>
+              <th
+                className="description table-head "
+                style={{ width: "10%" }}
+              >
+                Rental Term
+              </th>
+              <th
+                className="description table-head"
+                style={{ width: "10%" }}
+              >
+                Price
+              </th>
+              <th className="price mx-2 table-head" style={{ width: "15%" }}>
                 Availability
               </th>
-              <th className="cart mx-2 table-head" style={{ width: "25%" }}>
+              <th className="cart mx-2 table-head" style={{ width: "15%" }}>
                 Action
               </th>
             </thead>
             <tbody>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 py-1 my-3 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
+              {productList.payload.map((item) => {
+                return (
+                  <tr
+                    className=""
+                    style={{
+                      borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)",
+                    }}
                   >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
+                    <td className="my-2 text-start">{item.item}</td>
+                    <td className="my-2 text-start">
+                    {item.description}
+                    </td>
+                    <td>{item.rental_term} Days</td>
+                    <td>{item.price}</td>
+                    <td>
+                      <b>
+                        <button className="dp-available-btn px-3 py-1 my-3 mx-2 px-3 py-1">
+                        {item.availability}
+                        </button>
+                      </b>
+                    </td>
+                    <td>
+                      <button
+                        className="dp-btn mx-2 px-3 py-1"
+                        onClick={handleShowPrescribe}
+                      >
+                        Prescribe
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
               <tr
                 className=""
                 style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
@@ -1009,134 +982,8 @@ const DashboardPractitioner = () => {
                   Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
                   eiusmod
                 </td>
-
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 my-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
-
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 my-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
-                <td>
-                  <b>
-                    <button className="dp-unavailable-btn py-1 my-3 mx-2 px-3 py-1">
-                      Not Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
-                <td>
-                  <b>
-                    <button className="dp-unavailable-btn py-1 my-3 mx-2 px-3 py-1">
-                      Not Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
-
-                <td>
-                  <b>
-                    <button className="dp-available-btn px-3 my-3 py-1 mx-2 px-3 py-1">
-                      Available
-                    </button>
-                  </b>
-                </td>
-                <td>
-                  <button
-                    className="dp-btn mx-2 px-3 py-1"
-                    onClick={handleShowPrescribe}
-                  >
-                    Prescribe
-                  </button>
-                </td>
-              </tr>
-              <tr
-                className=""
-                style={{ borderBottom: "1.06px solid rgba(6, 47, 45, 0.4)" }}
-              >
-                <td className="my-2 text-start">Anti laser treatment</td>
-                <td className="my-2 text-start">
-                  Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do
-                  eiusmod
-                </td>
+                <td>20 days</td>
+                    <td>180.00</td>
                 <td>
                   <b>
                     <button className="dp-unavailable-btn py-1 my-3 mx-2 px-3 py-1">
@@ -1155,215 +1002,214 @@ const DashboardPractitioner = () => {
               </tr>
             </tbody>
           </table>
-      </div>
-      }
-      {
-        activeTab === "D" &&
-      <div className="text-start mx-5 my-5">
-        <h5 className="text-start my-d3">Previous Prescription</h5>
-        <Card className="previous-prescription-card d-flex justify-content-center my-3">
-          <Card.Body>
-            <table style={{ width: "100%" }}>
-              <thead>
-                <th
-                  className="product text-start px-4"
-                  style={{ width: "20%" }}
-                >
-                  Practitioner
-                </th>
-                <th
-                  className="description mx-2 text-start"
-                  style={{ width: "20%" }}
-                >
-                  Item
-                </th>
-                <th className="price mx-2" style={{ width: "15%" }}>
-                  Start Date
-                </th>
-                <th className="cart mx-2" style={{ width: "15%" }}>
-                  Return Date
-                </th>
-                <th className="cart mx-2 " style={{ width: "15%" }}>
-                  Price
-                </th>
-                <th style={{ width: "15%" }}></th>
-              </thead>
-              <tbody>
-                <tr className="" style={{ borderBottom: "1px solid #fff" }}>
-                  <td className="practitioner-info mx-3 my-3">
-                    {" "}
-                    <img
-                      className=""
-                      style={{
-                        borderRadius: "50%",
-                        height: "40px",
-                        width: "40px",
-                      }}
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                    />
-                    <h5 className="practitioner-title mx-2 my-2">
-                      Marlin Heir
-                    </h5>
-                  </td>
-                  <td className="my-2 text-start">Anti laser treatment</td>
-                  <td>05/03/2023</td>
-                  <td>11/04/2023</td>
-                  <td>
-                    <b>$ 28</b>
-                  </td>
-                  <td>
-                    <button
-                      className="details-btn mx-2 px-3 py-2"
-                      onClick={handleShowPp}
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-                <tr className="" style={{ borderBottom: "1px solid #fff" }}>
-                  <td className="practitioner-info mx-3 my-3">
-                    {" "}
-                    <img
-                      className=""
-                      style={{
-                        borderRadius: "50%",
-                        height: "40px",
-                        width: "40px",
-                      }}
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                    />
-                    <h5 className="practitioner-title mx-2 my-2">
-                      Marlin Heir
-                    </h5>
-                  </td>
-                  <td className="my-2 text-start">Anti laser treatment</td>
-                  <td>05/03/2023</td>
-                  <td>11/04/2023</td>
-                  <td>
-                    <b>$ 28</b>
-                  </td>
-                  <td>
-                    <button
-                      className="details-btn mx-2 px-3 py-2"
-                      onClick={handleShowPp}
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {/* <Button variant="primary">Go somewhere</Button> */}
-          </Card.Body>
-        </Card>
-        <h5 className="text-start my-d3">Previous Prescription</h5>
-        <Card className="previous-prescription-card d-flex justify-content-center my-3">
-          <Card.Body>
-            <table style={{ width: "100%" }}>
-              <thead>
-                <th
-                  className="product text-start px-4"
-                  style={{ width: "20%" }}
-                >
-                  Practitioner
-                </th>
-                <th
-                  className="description mx-2 text-start"
-                  style={{ width: "20%" }}
-                >
-                  Item
-                </th>
-                <th className="price mx-2" style={{ width: "15%" }}>
-                  Start Date
-                </th>
-                <th className="cart mx-2" style={{ width: "15%" }}>
-                  Return Date
-                </th>
-                <th className="cart mx-2 " style={{ width: "15%" }}>
-                  Price
-                </th>
-                <th style={{ width: "15%" }}></th>
-              </thead>
-              <tbody>
-                <tr className="" style={{ borderBottom: "1px solid #fff" }}>
-                  <td className="practitioner-info mx-3 my-3">
-                    {" "}
-                    <img
-                      className=""
-                      style={{
-                        borderRadius: "50%",
-                        height: "40px",
-                        width: "40px",
-                      }}
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                    />
-                    <h5 className="practitioner-title mx-2 my-2">
-                      Marlin Heir
-                    </h5>
-                  </td>
-                  <td className="my-2 text-start">Anti laser treatment</td>
-                  <td>05/03/2023</td>
-                  <td>11/04/2023</td>
-                  <td>
-                    <b>$ 28</b>
-                  </td>
-                  <td>
-                    <button
-                      className="details-btn mx-2 px-3 py-2"
-                      onClick={handleShowPp}
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-                <tr className="" style={{ borderBottom: "1px solid #fff" }}>
-                  <td className="practitioner-info mx-3 my-3">
-                    {" "}
-                    <img
-                      className=""
-                      style={{
-                        borderRadius: "50%",
-                        height: "40px",
-                        width: "40px",
-                      }}
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
-                    />
-                    <h5 className="practitioner-title mx-2 my-2">
-                      Marlin Heir
-                    </h5>
-                  </td>
-                  <td className="my-2 text-start">Anti laser treatment</td>
-                  <td>05/03/2023</td>
-                  <td>11/04/2023</td>
-                  <td>
-                    <b>$ 28</b>
-                  </td>
-                  <td>
-                    <button
-                      className="details-btn mx-2 px-3 py-2"
-                      onClick={handleShowPp}
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {/* <Button variant="primary">Go somewhere</Button> */}
-          </Card.Body>
-        </Card>
-      </div>
-      }
+        </div>
+      )}
+      {activeTab === "D" && (
+        <div className="text-start mx-5 my-5">
+          <h5 className="text-start my-d3">Previous Prescription</h5>
+          <Card className="previous-prescription-card d-flex justify-content-center my-3">
+            <Card.Body>
+              <table style={{ width: "100%" }}>
+                <thead>
+                  <th
+                    className="product text-start px-4"
+                    style={{ width: "20%" }}
+                  >
+                    Practitioner
+                  </th>
+                  <th
+                    className="description mx-2 text-start"
+                    style={{ width: "20%" }}
+                  >
+                    Item
+                  </th>
+                  <th className="price mx-2" style={{ width: "15%" }}>
+                    Start Date
+                  </th>
+                  <th className="cart mx-2" style={{ width: "15%" }}>
+                    Return Date
+                  </th>
+                  <th className="cart mx-2 " style={{ width: "15%" }}>
+                    Price
+                  </th>
+                  <th style={{ width: "15%" }}></th>
+                </thead>
+                <tbody>
+                  <tr className="" style={{ borderBottom: "1px solid #fff" }}>
+                    <td className="practitioner-info mx-3 my-3">
+                      {" "}
+                      <img
+                        className=""
+                        style={{
+                          borderRadius: "50%",
+                          height: "40px",
+                          width: "40px",
+                        }}
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
+                      />
+                      <h5 className="practitioner-title mx-2 my-2">
+                        Marlin Heir
+                      </h5>
+                    </td>
+                    <td className="my-2 text-start">Anti laser treatment</td>
+                    <td>05/03/2023</td>
+                    <td>11/04/2023</td>
+                    <td>
+                      <b>$ 28</b>
+                    </td>
+                    <td>
+                      <button
+                        className="details-btn mx-2 px-3 py-2"
+                        onClick={handleShowPp}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                  <tr className="" style={{ borderBottom: "1px solid #fff" }}>
+                    <td className="practitioner-info mx-3 my-3">
+                      {" "}
+                      <img
+                        className=""
+                        style={{
+                          borderRadius: "50%",
+                          height: "40px",
+                          width: "40px",
+                        }}
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
+                      />
+                      <h5 className="practitioner-title mx-2 my-2">
+                        Marlin Heir
+                      </h5>
+                    </td>
+                    <td className="my-2 text-start">Anti laser treatment</td>
+                    <td>05/03/2023</td>
+                    <td>11/04/2023</td>
+                    <td>
+                      <b>$ 28</b>
+                    </td>
+                    <td>
+                      <button
+                        className="details-btn mx-2 px-3 py-2"
+                        onClick={handleShowPp}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {/* <Button variant="primary">Go somewhere</Button> */}
+            </Card.Body>
+          </Card>
+          <h5 className="text-start my-d3">Previous Prescription</h5>
+          <Card className="previous-prescription-card d-flex justify-content-center my-3">
+            <Card.Body>
+              <table style={{ width: "100%" }}>
+                <thead>
+                  <th
+                    className="product text-start px-4"
+                    style={{ width: "20%" }}
+                  >
+                    Practitioner
+                  </th>
+                  <th
+                    className="description mx-2 text-start"
+                    style={{ width: "20%" }}
+                  >
+                    Item
+                  </th>
+                  <th className="price mx-2" style={{ width: "15%" }}>
+                    Start Date
+                  </th>
+                  <th className="cart mx-2" style={{ width: "15%" }}>
+                    Return Date
+                  </th>
+                  <th className="cart mx-2 " style={{ width: "15%" }}>
+                    Price
+                  </th>
+                  <th style={{ width: "15%" }}></th>
+                </thead>
+                <tbody>
+                  <tr className="" style={{ borderBottom: "1px solid #fff" }}>
+                    <td className="practitioner-info mx-3 my-3">
+                      {" "}
+                      <img
+                        className=""
+                        style={{
+                          borderRadius: "50%",
+                          height: "40px",
+                          width: "40px",
+                        }}
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
+                      />
+                      <h5 className="practitioner-title mx-2 my-2">
+                        Marlin Heir
+                      </h5>
+                    </td>
+                    <td className="my-2 text-start">Anti laser treatment</td>
+                    <td>05/03/2023</td>
+                    <td>11/04/2023</td>
+                    <td>
+                      <b>$ 28</b>
+                    </td>
+                    <td>
+                      <button
+                        className="details-btn mx-2 px-3 py-2"
+                        onClick={handleShowPp}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                  <tr className="" style={{ borderBottom: "1px solid #fff" }}>
+                    <td className="practitioner-info mx-3 my-3">
+                      {" "}
+                      <img
+                        className=""
+                        style={{
+                          borderRadius: "50%",
+                          height: "40px",
+                          width: "40px",
+                        }}
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJvILcdNN4_OrE5EBa556RCKHQoxKqVWXV5duOjBrWfYCXDliVMO8bWruUTIOjbqOjzqI&usqp=CAU"
+                      />
+                      <h5 className="practitioner-title mx-2 my-2">
+                        Marlin Heir
+                      </h5>
+                    </td>
+                    <td className="my-2 text-start">Anti laser treatment</td>
+                    <td>05/03/2023</td>
+                    <td>11/04/2023</td>
+                    <td>
+                      <b>$ 28</b>
+                    </td>
+                    <td>
+                      <button
+                        className="details-btn mx-2 px-3 py-2"
+                        onClick={handleShowPp}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {/* <Button variant="primary">Go somewhere</Button> */}
+            </Card.Body>
+          </Card>
+        </div>
+      )}
       <Container className="d-flex justify-content-center my-5">
-          <span className="ask-btn ps-3 pe-5 mx-3">
-            <img className=" ask-btn-img mt-3" src={AskBtn} />
-            <span className="mt-3 mx-3">Ask a Question</span>
-          </span>
-          <span className="resource-btn ps-5 pe-3 py-3 ">
-            Resources
-            <img className="ms-5" src={ArrowDownRight} />
-          </span>
-        </Container>
+        <span className="ask-btn ps-3 pe-5 mx-3">
+          <img className=" ask-btn-img mt-3" src={AskBtn} />
+          <span className="mt-3 mx-3">Ask a Question</span>
+        </span>
+        <span className="resource-btn ps-5 pe-3 py-3 ">
+          Resources
+          <img className="ms-5" src={ArrowDownRight} />
+        </span>
+      </Container>
       <Footer />
     </div>
   );
